@@ -15,7 +15,7 @@ type (
 		TextOriginal          string                        `json:"textOriginal"`
 		ParentID              string                        `json:"parentId"`
 		CanRate               bool                          `json:"canRate"`
-		ViewerRating          bool                          `json:"viewerRating"`
+		ViewerRating          string                        `json:"viewerRating"`
 		LikeCount             int64                         `json:"likeCount"`
 		ModerationStatus      string                        `json:"moderationStatus"`
 		PublishedAt           time.Time                     `json:"publishedAt"`
