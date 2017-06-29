@@ -22,10 +22,11 @@ push-tag:
 	git push origin ${BRANCH} --tags
 
 test:
-	@go test . -cover
+	API_KEY=${API_KEY} go test . -cover
 
 test-ci:
-	@docker run \
+	API_KEY=${API_KEY} \
+	docker run \
 	-v "${CURDIR}":${PATH_BASE}/${REPONAME} \
 	-w ${PATH_BASE}/${REPONAME} \
 	--entrypoint=go \

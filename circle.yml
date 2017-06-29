@@ -8,7 +8,7 @@ dependencies:
 
 test:
   override:
-    - make test-ci
+    - make test-ci -e API_KEY=$API_KEY
 
 deployment:
   feature-branch:
