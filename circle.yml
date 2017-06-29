@@ -1,0 +1,17 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - make install-ci
+
+test:
+  override:
+    - make test-ci -e API_KEY=$API_KEY
+
+deployment:
+  feature-branch:
+    branch: /^((?!master).)*$/
+    commands:
+      - make check-version
