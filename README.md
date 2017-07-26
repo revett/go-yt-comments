@@ -15,9 +15,7 @@ You will need a YouTube API key, see the [docs](https://developers.google.com/yo
 ```golang
 package main
 
-import (
-  "github.com/revett/go-yt-comments/ytc"
-)
+import "github.com/revett/go-yt-comments/ytc"
 
 func main() {
   key := os.Getenv("API_KEY")
