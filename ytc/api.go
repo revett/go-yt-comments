@@ -1,11 +1,11 @@
-package ytcomments
+package ytc
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/revett/go-yt-comments/models/api"
+	"github.com/revett/go-yt-comments/ytc/models/api"
 )
 
 type (

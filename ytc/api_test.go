@@ -1,10 +1,10 @@
-package ytcomments_test
+package ytc_test
 
 import (
 	"os"
 	"testing"
 
-	ytcomments "github.com/revett/go-yt-comments"
+	"github.com/revett/go-yt-comments/ytc"
 )
 
 func TestAPI(t *testing.T) {
@@ -14,7 +14,7 @@ func TestAPI(t *testing.T) {
 			maxComments := 250
 			videoID := "oS169nq8Prw"
 
-			api := ytcomments.NewAPI(key)
+			api := ytc.NewAPI(key)
 
 			commentThreadLists, err := api.FetchComments(videoID, maxComments)
 			if err != nil {
@@ -38,7 +38,7 @@ func TestAPI(t *testing.T) {
 			maxComments := 250
 			videoID := "oS169nq8Prw"
 
-			api := ytcomments.NewAPI(key)
+			api := ytc.NewAPI(key)
 
 			_, err := api.FetchComments(videoID, maxComments)
 			if err == nil {
