@@ -15,7 +15,7 @@ You will need a YouTube API key, see the [docs](https://developers.google.com/yo
 package main
 
 import (
-  ytcomments "github.com/revett/go-yt-comments"
+  "github.com/revett/go-yt-comments/ytc"
 )
 
 func main() {
@@ -23,7 +23,7 @@ func main() {
   maxComments := 250
   videoID := "oS169nq8Prw"
 
-  api := ytcomments.NewAPI(key)
+  api := ytc.NewAPI(key)
 
   commentThreadLists, err := api.FetchComments(videoID, maxComments)
   if err != nil {
