@@ -2,6 +2,7 @@
 
 ![GitHub tag](https://img.shields.io/github/tag/revett/go-yt-comments.svg?style=flat)
 [![CircleCI](https://circleci.com/gh/revett/go-yt-comments/tree/master.svg?style=shield)](https://circleci.com/gh/revett/go-yt-comments/tree/master)
+[![GoReportCard](https://goreportcard.com/badge/github.com/revett/go-yt-comments)](https://goreportcard.com/report/github.com/revett/go-yt-comments)
 
 Tiny Golang package for retrieving video comments from the YouTube API.
 
