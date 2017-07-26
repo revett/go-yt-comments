@@ -2,6 +2,7 @@ BRANCH = "master"
 GO_BUILDER_IMAGE = "vidsyhq/go-builder"
 PATH_BASE = "/go/src/github.com/revett"
 REPONAME = "go-yt-comments"
+TEST_PACKAGES = "./ytc"
 VERSION = $(shell cat ./VERSION)
 
 check-version:
@@ -22,7 +23,7 @@ push-tag:
 	git push origin ${BRANCH} --tags
 
 test:
-	@API_KEY=${API_KEY} go test . -cover
+	@API_KEY=${API_KEY} go test "${TEST_PACKAGES}" -cover
 
 test-ci:
 	@docker run \
@@ -30,4 +31,4 @@ test-ci:
 	-v "${CURDIR}":${PATH_BASE}/${REPONAME} \
 	-w ${PATH_BASE}/${REPONAME} \
 	--entrypoint=go \
-	${GO_BUILDER_IMAGE} test . -cover
+	${GO_BUILDER_IMAGE} test "${TEST_PACKAGES}" -cover
