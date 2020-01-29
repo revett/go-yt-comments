@@ -36,7 +36,7 @@ func main() {
 
 ## Options
 
-The `youtube.Do` function takes zero or more `opts` that allow for the modification for the
+`youtube.Do()` takes zero or more `opts` that allow for the modification for the
 underlying API client.
 
 The following `opt` overrides the default API endpoint used:
