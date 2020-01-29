@@ -17,4 +17,5 @@ func TestDo(t *testing.T) {
 
 	require.NoError(t, err)
 	require.Len(t, ctls, 3)
+	require.GreaterOrEqual(t, ctls.Len(), maxComments)
 }
