@@ -12,7 +12,7 @@
 
 ## Usage
 
-The example below fetches a maxium of 250 comments for the this
+The example below fetches a maxium of 250 comments for this
 [video](https://www.youtube.com/watch?v=oS169nq8Prw).
 
 ```golang
@@ -37,3 +37,12 @@ func main() {
 ## Credentials
 
 You will need a YouTube API key, see the [docs](https://developers.google.com/youtube/v3/docs/).
+
+## Options
+
+If you would like more control over the requests being made, then have a read of the official
+Google package:
+
+```
+https://godoc.org/google.golang.org/api/youtube/v3
+```
