@@ -20,7 +20,7 @@ func Do(token string, videoID string, maxComments int, opts ...internal.ClientOp
 	}
 
 	var ctls CommentThreadLists
-	return fetch(0, c, r, maxComments, ctls)
+	return fetch(c, r, maxComments, ctls)
 }
 
 // WithCustomEndpoint specifies a different underlying API endpoint to use when making requests.
@@ -30,9 +30,7 @@ func WithCustomEndpoint(e string) internal.ClientOption {
 	}
 }
 
-func fetch(count int, c *internal.Client, req *http.Request, maxComments int, ctls CommentThreadLists) (CommentThreadLists, error) {
-	count++
-
+func fetch(c *internal.Client, req *http.Request, maxComments int, ctls CommentThreadLists) (CommentThreadLists, error) {
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -44,29 +42,6 @@ func fetch(count int, c *internal.Client, req *http.Request, maxComments int, ct
 			"non-200 status code returned from youtube api, got: '%d'", resp.StatusCode,
 		)
 	}
-
-	// // new
-
-	// body, err := ioutil.ReadAll(resp.Body)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// buffer := new(bytes.Buffer)
-	// if err := json.Compact(buffer, body); err != nil {
-	// 	return nil, err
-	// }
-
-	// if count == 4 {
-	// 	fmt.Println(buffer)
-	// }
-
-	// var ctl CommentThreadList
-	// err = json.Unmarshal(body, &ctl)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// // end new
 
 	var ctl CommentThreadList
 	err = json.NewDecoder(resp.Body).Decode(&ctl)
@@ -86,7 +61,7 @@ func fetch(count int, c *internal.Client, req *http.Request, maxComments int, ct
 			return nil, err
 		}
 
-		return fetch(count, c, nextReq, maxComments, ctls)
+		return fetch(c, nextReq, maxComments, ctls)
 	}
 
 	return ctls, nil
