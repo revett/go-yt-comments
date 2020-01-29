@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://images.unsplash.com/photo-1497015289639-54688650d173?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3889&q=80" width="100%">
+  <img src="./docs/readme_header.png" width="100%">
 </p>
 
 <h1 align="center">
