@@ -4,5 +4,5 @@ guard-%:
 		exit 1; \
 	fi
 
-test: guard-TOKEN
+test:
 	go test ./... -cover

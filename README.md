@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://images.unsplash.com/photo-1497015289639-54688650d173?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3889&q=80" width="100%">
+  <img src="./docs/header.png" width="100%">
 </p>
 
 <h1 align="center">
@@ -34,11 +34,25 @@ func main() {
 }
 ```
 
+## Options
+
+`youtube.Do()` takes zero or more `opts` that allow for the modification for the
+underlying API client.
+
+The following `opt` overrides the default API endpoint used:
+
+```golang
+func main() {
+  e := "https://example.com"
+  _, err := youtube.Do("TOKEN", "oS169nq8Prw", 250, youtube.WithCustomEndpoint(e))
+}
+```
+
 ## Credentials
 
-You will need a YouTube API key, see the [docs](https://developers.google.com/youtube/v3/docs/).
+You will need a YouTube API token, see the [docs](https://developers.google.com/youtube/v3/docs/).
 
-## Options
+## Other
 
 If you would like more control over the requests being made, then have a read of the official
 Google package:
