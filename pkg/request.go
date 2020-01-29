@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -11,16 +12,22 @@ import (
 // Do receives a YouTube Video ID and a MaxComments integer as arguments. The Video ID is used to
 // know what video to fetch comments for. The MaxComments integer is used to know how many comments
 // to fetch. The function returns an array of CommentThreadList YouTube structs.
-func Do(token string, videoID string, maxComments int, opts ...internal.ClientOption) (CommentThreadLists, error) {
+func Do(ctx context.Context, token string, videoID string, maxComments int, opts ...internal.ClientOption) (CommentThreadLists, error) {
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	default:
+	}
+
 	c := internal.NewClient(token, opts...)
 
-	r, err := formRequest(c, videoID, "")
+	r, err := formRequest(ctx, c, videoID, "")
 	if err != nil {
 		return nil, err
 	}
 
 	var ctls CommentThreadLists
-	return fetch(c, r, maxComments, ctls)
+	return fetch(ctx, c, r, maxComments, ctls)
 }
 
 // WithCustomEndpoint specifies a different underlying API endpoint to use when making requests.
@@ -30,7 +37,7 @@ func WithCustomEndpoint(e string) internal.ClientOption {
 	}
 }
 
-func fetch(c *internal.Client, req *http.Request, maxComments int, ctls CommentThreadLists) (CommentThreadLists, error) {
+func fetch(ctx context.Context, c *internal.Client, req *http.Request, maxComments int, ctls CommentThreadLists) (CommentThreadLists, error) {
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -56,23 +63,24 @@ func fetch(c *internal.Client, req *http.Request, maxComments int, ctls CommentT
 	}
 
 	if ctls.Len() < maxComments {
-		nextReq, err := formRequest(c, ctl.Items[0].Snippet.VideoID, ctl.NextPageToken)
+		nextReq, err := formRequest(ctx, c, ctl.Items[0].Snippet.VideoID, ctl.NextPageToken)
 		if err != nil {
 			return nil, err
 		}
 
-		return fetch(c, nextReq, maxComments, ctls)
+		return fetch(ctx, c, nextReq, maxComments, ctls)
 	}
 
 	return ctls, nil
 }
 
-func formRequest(c *internal.Client, videoID string, nextPageToken string) (*http.Request, error) {
+func formRequest(ctx context.Context, c *internal.Client, videoID string, nextPageToken string) (*http.Request, error) {
 	req, err := http.NewRequest("GET", c.Endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
 
+	req = req.WithContext(ctx)
 	qp := req.URL.Query()
 
 	qp.Add("key", c.Token)

@@ -1,6 +1,7 @@
 package pkg_test
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -8,6 +9,7 @@ import (
 	"net/http/httptest"
 	"path/filepath"
 	"testing"
+	"time"
 
 	youtube "github.com/revett/youtube-comments/pkg"
 	"github.com/stretchr/testify/require"
@@ -34,7 +36,11 @@ func TestDo(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	ctls, err := youtube.Do(token, videoID, maxComments, youtube.WithCustomEndpoint(srv.URL))
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
+	defer cancel()
+
+	ctls, err := youtube.Do(ctx, token, videoID, maxComments, youtube.WithCustomEndpoint(srv.URL))
 
 	require.NoError(t, err)
 	require.Len(t, ctls, 3)
