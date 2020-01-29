@@ -1,34 +1,39 @@
-# go-yt-comments
+<p align="center">
+  <img src="https://images.unsplash.com/photo-1497015289639-54688650d173?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3889&q=80" width="100%">
+</p>
 
-![GitHub tag](https://img.shields.io/github/tag/revett/go-yt-comments.svg?style=flat)
-[![CircleCI](https://circleci.com/gh/revett/go-yt-comments/tree/master.svg?style=shield)](https://circleci.com/gh/revett/go-yt-comments/tree/master)
-[![GoReportCard](https://goreportcard.com/badge/github.com/revett/go-yt-comments)](https://goreportcard.com/report/github.com/revett/go-yt-comments)
+<h1 align="center">
+  youtube-comments
+</h1>
 
-Tiny Golang package for retrieving video comments from the YouTube API.
-
-## API Access
-
-You will need a YouTube API key, see the [docs](https://developers.google.com/youtube/v3/docs/).
+<p align="center">
+  Go package for quickly fetching video comments from the YouTube API
+</p>
 
 ## Usage
+
+The example below fetches a maxium of 250 comments for the this
+[video](https://www.youtube.com/watch?v=oS169nq8Prw).
 
 ```golang
 package main
 
-import "github.com/revett/go-yt-comments/ytc"
+import (
+  "log"
+
+  youtube "github.com/revett/youtube-comments/pkg"
+)
 
 func main() {
-  key := os.Getenv("API_KEY")
-  maxComments := 250
-  videoID := "oS169nq8Prw"
-
-  api := ytc.NewAPI(key)
-
-  commentThreadLists, err := api.FetchComments(videoID, maxComments)
+  ctls, err := youtube.Do("TOKEN", "oS169nq8Prw", 250)
   if err != nil {
-    panic(err)
+    log.Fatal(err)
   }
 
-  fmt.Println(commentThreadLists)
+  log.Printf("got %d comments", ctls.Len())
 }
 ```
+
+## Credentials
+
+You will need a YouTube API key, see the [docs](https://developers.google.com/youtube/v3/docs/).
