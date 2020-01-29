@@ -42,10 +42,10 @@ underlying API client.
 The following `opt` overrides the default API endpoint used:
 
 ```golang
-endpoint := "https://example.com"
-_, err := youtube.Do(
-  "TOKEN", "oS169nq8Prw", 250, youtube.WithCustomEndpoint(endpoint),
-)
+func main() {
+  e := "https://example.com"
+  _, err := youtube.Do("TOKEN", "oS169nq8Prw", 250, youtube.WithCustomEndpoint(e))
+}
 ```
 
 ## Credentials
