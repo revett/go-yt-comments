@@ -25,7 +25,8 @@ import (
 )
 
 func main() {
-  ctls, err := youtube.Do("TOKEN", "oS169nq8Prw", 250)
+  ctx := context.Background()
+  ctls, err := youtube.Do(ctx, "TOKEN", "oS169nq8Prw", 250)
   if err != nil {
     log.Fatal(err)
   }
@@ -33,6 +34,10 @@ func main() {
   log.Printf("got %d comments", ctls.Len())
 }
 ```
+
+## Credentials
+
+You will need a YouTube API token, see the [docs](https://developers.google.com/youtube/v3/docs/).
 
 ## Options
 
@@ -43,14 +48,26 @@ The following `opt` overrides the default API endpoint used:
 
 ```golang
 func main() {
+  ctx := context.Background()
   e := "https://example.com"
-  _, err := youtube.Do("TOKEN", "oS169nq8Prw", 250, youtube.WithCustomEndpoint(e))
+  _, err := youtube.Do(ctx, "TOKEN", "oS169nq8Prw", 250, youtube.WithCustomEndpoint(e))
 }
 ```
 
-## Credentials
+## Context
 
-You will need a YouTube API token, see the [docs](https://developers.google.com/youtube/v3/docs/).
+`youtube.Do()` takes a `context.Context`, which allows you to cancel the request, or specify a
+sensible timeout etc.
+
+```golang
+func main() {
+  ctx := context.Background()
+  ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
+
+  _, err := youtube.Do(ctx, "TOKEN", "oS169nq8Prw", 250)
+}
+```
 
 ## Other
 
