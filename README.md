@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  Go package for quickly fetching video comments from the YouTube API
+  Go package for quickly fetching YouTube video comments
 </p>
 
 ## Usage
