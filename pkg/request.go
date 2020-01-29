@@ -11,20 +11,29 @@ import (
 // Do receives a YouTube Video ID and a MaxComments integer as arguments. The Video ID is used to
 // know what video to fetch comments for. The MaxComments integer is used to know how many comments
 // to fetch. The function returns an array of CommentThreadList YouTube structs.
-func Do(token string, videoID string, maxComments int) (CommentThreadLists, error) {
-	r, err := formRequest(token, videoID, "")
+func Do(token string, videoID string, maxComments int, opts ...internal.ClientOption) (CommentThreadLists, error) {
+	c := internal.NewClient(token, opts...)
+
+	r, err := formRequest(c, videoID, "")
 	if err != nil {
 		return nil, err
 	}
 
 	var ctls CommentThreadLists
-	return fetch(token, r, maxComments, ctls)
+	return fetch(0, c, r, maxComments, ctls)
 }
 
-func fetch(token string, req *http.Request, maxComments int, ctls CommentThreadLists) (CommentThreadLists, error) {
-	c := http.Client{}
+// WithCustomEndpoint specifies a different underlying API endpoint to use when making requests.
+func WithCustomEndpoint(e string) internal.ClientOption {
+	return func(c *internal.Client) {
+		c.Endpoint = e
+	}
+}
 
-	resp, err := c.Do(req)
+func fetch(count int, c *internal.Client, req *http.Request, maxComments int, ctls CommentThreadLists) (CommentThreadLists, error) {
+	count++
+
+	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -36,8 +45,30 @@ func fetch(token string, req *http.Request, maxComments int, ctls CommentThreadL
 		)
 	}
 
-	var ctl CommentThreadList
+	// // new
 
+	// body, err := ioutil.ReadAll(resp.Body)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// buffer := new(bytes.Buffer)
+	// if err := json.Compact(buffer, body); err != nil {
+	// 	return nil, err
+	// }
+
+	// if count == 4 {
+	// 	fmt.Println(buffer)
+	// }
+
+	// var ctl CommentThreadList
+	// err = json.Unmarshal(body, &ctl)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	// // end new
+
+	var ctl CommentThreadList
 	err = json.NewDecoder(resp.Body).Decode(&ctl)
 	if err != nil {
 		return nil, err
@@ -50,26 +81,26 @@ func fetch(token string, req *http.Request, maxComments int, ctls CommentThreadL
 	}
 
 	if ctls.Len() < maxComments {
-		nextReq, err := formRequest(token, ctl.Items[0].Snippet.VideoID, ctl.NextPageToken)
+		nextReq, err := formRequest(c, ctl.Items[0].Snippet.VideoID, ctl.NextPageToken)
 		if err != nil {
 			return nil, err
 		}
 
-		return fetch(token, nextReq, maxComments, ctls)
+		return fetch(count, c, nextReq, maxComments, ctls)
 	}
 
 	return ctls, nil
 }
 
-func formRequest(token string, videoID string, nextPageToken string) (*http.Request, error) {
-	req, err := http.NewRequest("GET", internal.BaseURI, nil)
+func formRequest(c *internal.Client, videoID string, nextPageToken string) (*http.Request, error) {
+	req, err := http.NewRequest("GET", c.Endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	qp := req.URL.Query()
 
-	qp.Add("key", token)
+	qp.Add("key", c.Token)
 	qp.Add("maxResults", internal.MaxResults)
 	qp.Add("order", "time")
 	qp.Add("part", "snippet,replies")
