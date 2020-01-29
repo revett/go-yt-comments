@@ -64,7 +64,7 @@ sensible timeout etc.
 func main() {
   ctx := context.Background()
   ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
-	defer cancel()
+  defer cancel()
 
   _, err := youtube.Do(ctx, "TOKEN", "oS169nq8Prw", 250)
 }
