@@ -15,7 +15,7 @@
 The example below fetches a maxium of 250 comments for this
 [video](https://www.youtube.com/watch?v=oS169nq8Prw).
 
-```go
+```golang
 package main
 
 import (
@@ -41,7 +41,7 @@ underlying API client.
 
 The following `opt` overrides the default API endpoint used:
 
-```go
+```golang
 endpoint := "https://example.com"
 _, err := youtube.Do(
   "TOKEN", "oS169nq8Prw", 250, youtube.WithCustomEndpoint(endpoint),
