@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/readme_header.png" width="100%">
+  <img src="./docs/header.png" width="100%">
 </p>
 
 <h1 align="center">
