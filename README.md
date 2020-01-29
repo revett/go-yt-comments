@@ -50,7 +50,7 @@ func main() {
 
 ## Credentials
 
-You will need a YouTube API key, see the [docs](https://developers.google.com/youtube/v3/docs/).
+You will need a YouTube API token, see the [docs](https://developers.google.com/youtube/v3/docs/).
 
 ## Other
 
