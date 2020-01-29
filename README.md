@@ -70,6 +70,10 @@ func main() {
 }
 ```
 
+## Status
+
+[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/revett/youtube-comments/Test/master?style=flat-square)](https://github.com/revett/youtube-comments/actions?query=workflow%3ATest)
+
 ## Other
 
 If you would like more control over the requests being made, then have a read of the official
