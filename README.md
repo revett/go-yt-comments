@@ -19,6 +19,7 @@ The example below fetches a maxium of 250 comments for this
 package main
 
 import (
+  "context"
   "log"
 
   youtube "github.com/revett/youtube-comments/pkg"
