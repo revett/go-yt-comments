@@ -17,8 +17,13 @@ type (
 	// Option is a functional option for configuring the Do function.
 	Option func(*config)
 
+	// HTTPClient is TODO
+	HTTPClient interface {
+		Do(req *http.Request) (*http.Response, error)
+	}
+
 	config struct {
-		httpClient  *http.Client
+		httpClient  HTTPClient
 		maxComments int
 		token       string
 		videoID     string
@@ -45,6 +50,12 @@ func Do(token string, videoID string, opts ...Option) (CommentThreadLists, error
 
 	lists := CommentThreadLists{}
 	return fetch(cfg, req, lists)
+}
+
+func WithHTTPClient(c HTTPClient) Option {
+	return func(cfg *config) {
+		cfg.httpClient = c
+	}
 }
 
 func fetch(cfg config, req *http.Request, lists CommentThreadLists) (CommentThreadLists, error) {

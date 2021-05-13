@@ -1,51 +1,70 @@
 package ytcfetch_test
 
-// func TestDo(t *testing.T) {
-// 	rp := loadRequestPages(t)
+import (
+	"bytes"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"path/filepath"
+	"testing"
 
-// 	calls := 0
-// 	maxComments := 250
-// 	token := "0e2346d3-158e-4713-921c-24350bf64532"
-// 	videoID := "oS169nq8Prw"
+	"github.com/revett/ytcfetch"
+	"github.com/stretchr/testify/require"
+)
 
-// 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		qp := r.URL.Query()
-// 		require.Equal(t, token, qp.Get("key"))
-// 		require.Equal(t, "100", qp.Get("maxResults"))
-// 		require.Equal(t, "time", qp.Get("order"))
-// 		require.Equal(t, "snippet,replies", qp.Get("part"))
-// 		require.Equal(t, "oS169nq8Prw", qp.Get("videoId"))
+func TestDo(t *testing.T) {
+	t.Parallel()
 
-// 		io.WriteString(w, rp[calls])
-// 		calls++
-// 	}))
-// 	defer srv.Close()
+	token := "0e2346d3-158e-4713-921c-24350bf64532"
+	videoID := "oS169nq8Prw"
 
-// 	ctx := context.Background()
-// 	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
-// 	defer cancel()
+	tests := map[string]struct {
+		client ytcfetch.HTTPClient
+		want   int
+		err    require.ErrorAssertionFunc
+	}{
+		"Simple": {
+			client: mockClient{},
+			err:    require.NoError,
+			want:   13,
+		},
+	}
 
-// 	ctls, err := youtube.Do(ctx, token, videoID, maxComments, youtube.WithCustomEndpoint(srv.URL))
+	for n, testCase := range tests {
+		tc := testCase
 
-// 	require.NoError(t, err)
-// 	require.Len(t, ctls, 3)
-// 	require.GreaterOrEqual(t, ctls.Len(), maxComments)
-// }
+		t.Run(n, func(t *testing.T) {
+			t.Parallel()
 
-// func loadRequestPages(t *testing.T) []string {
-// 	rp := []string{}
-// 	for i := 0; i < 3; i++ {
-// 		b := helperLoadBytes(t, fmt.Sprintf("page_%d.json", i))
-// 		rp = append(rp, string(b))
-// 	}
-// 	return rp
-// }
+			lists, err := ytcfetch.Do(
+				token, videoID, ytcfetch.WithHTTPClient(tc.client),
+			)
 
-// func helperLoadBytes(t *testing.T, name string) []byte {
-// 	p := filepath.Join("testdata", name)
-// 	b, err := ioutil.ReadFile(p)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-// 	return b
-// }
+			tc.err(t, err)
+			require.Equal(t, tc.want, lists.Len())
+		})
+	}
+}
+
+type mockClient struct{}
+
+func (m mockClient) Do(req *http.Request) (*http.Response, error) {
+	b := helperLoadBytes(fmt.Sprintf("page_%d.json", 0))
+	r := ioutil.NopCloser(bytes.NewReader([]byte(b)))
+
+	return &http.Response{
+		Body: r,
+	}, nil
+}
+
+func helperLoadBytes(name string) []byte {
+	p := filepath.Join("testdata", name)
+
+	b, err := ioutil.ReadFile(p)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return b
+}
