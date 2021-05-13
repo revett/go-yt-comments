@@ -1,16 +1,14 @@
-<p align="center">
-  <img src="./docs/header.png" width="100%">
-</p>
+# ytcfetch [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://pkg.go.dev/github.com/revett/ytcfetch) [![Go Report Card](https://goreportcard.com/badge/github.com/revett/ytcfetch)](https://goreportcard.com/report/github.com/revett/ytcfetch)
 
-<h1 align="center">
-  youtube-comments
-</h1>
-
-<p align="center">
-  Go package for quickly fetching YouTube video comments
-</p>
+📹 `ytcfetch` - **YouTube Comment Fetcher** is a small convenience Go package for
+quickly fetching the comments for a specific YouTube video. It has zero
+dependencies.
 
 ## Usage
+
+View [**full documentation** (godoc) →](https://pkg.go.dev/github.com/revett/ytcfetch)
+
+### Example
 
 The example below fetches a maxium of 250 comments for this
 [video](https://www.youtube.com/watch?v=oS169nq8Prw).
@@ -36,11 +34,11 @@ func main() {
 }
 ```
 
-## Credentials
+### Credentials
 
 You will need a YouTube API token, see the [docs](https://developers.google.com/youtube/v3/docs/).
 
-## Options
+### Options
 
 `youtube.Do()` takes zero or more `opts` that allow for the modification for the
 underlying API client.
@@ -55,7 +53,7 @@ func main() {
 }
 ```
 
-## Context
+### Context
 
 `youtube.Do()` takes a `context.Context`, which allows you to cancel the request, or specify a
 sensible timeout etc.
@@ -70,9 +68,13 @@ func main() {
 }
 ```
 
-## Status
+## Examples
 
-[![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/revett/youtube-comments/Test/master?style=flat-square)](https://github.com/revett/youtube-comments/actions?query=workflow%3ATest)
+- TODO
+
+## Dependencies
+
+- None
 
 ## Other
 
@@ -82,3 +84,7 @@ Google package:
 ```
 https://godoc.org/google.golang.org/api/youtube/v3
 ```
+
+## Credit
+
+- TODO
