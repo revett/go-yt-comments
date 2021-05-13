@@ -1,7 +1,5 @@
-module github.com/revett/youtube-comments
+module github.com/revett/ytcfetch
 
-go 1.12
+go 1.16
 
-require (
-	github.com/stretchr/testify v1.4.0
-)
+require github.com/stretchr/testify v1.4.0
